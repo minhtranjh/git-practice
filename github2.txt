@@ -45,10 +45,14 @@ và điều đó là không cần thiết lịch sử commit trở nên phức t
     Ví dụ :
         Nếu A sử dụng rebase ở đây thì khi push lên Remote thì Github sẽ cảnh cáo vì trên Remote các commit vẫn đang ở lúc chưa rebase,
     ở dưới local thì khi rebase nó đã rewrite lại các commit đó nên hai commit là hoàn toàn khác nhau nên git không thế thực hiện việc merge code mới vào remote.
-    Để giải quyết thì sử dụng git push -f thì commit ở trên Remote sẽ bị rewrite. Và rồi có một anh B đã từng checkout trên production đó cũng muốn push code lên production. 
-    cũng bị hiện tượng giống vậy commit ở dưới local của họ lại khác so với commit ở trên Remote bị rebase nên git không thể merge code mới. Anh B thực hiện pull code từ Remote về để merge vào code tại local của mình rồi push lên Remote lại.
-    Và rồi có 1 anh C cũng làm việc trên production trước khi anh A làm rối tung lên. C muốn push lên thì phải pull về thì là một đống commit được merge 1 cách rối tung lên. 
-    Nếu team có nhiều người đều như vậy thì history của production sẽ mess up khó kiểm soát.
+    Để giải quyết thì sử dụng git push -f thì commit ở trên Remote sẽ bị rewrite.
+    Và rồi có một anh B đã từng checkout trên production đó cũng muốn push code lên Remote. 
+    cũng bị hiện tượng giống vậy commit ở dưới local của họ lại khác so với commit ở trên Remote bị rebase nên git không thể merge code mới. Anh B thực hiện pull code từ Remote về để merge vào code tại local của mình rồi push lại lên Remote .
+    Và rồi có 1 anh C cũng làm việc trên production trước khi anh A làm rối tung lên. C cũng muốn push code mình đã sửa vào production lên Remote thì phải pull về thì là một đống commit merge quá merge của mấy ông thực hiên trước đó. 
+    Nếu team có nhiều người đều như vậy thì history của production sẽ rất khó để kiểm soát.
+    Quay lại lúc đầu nếu lúc A chuẩn bị push -f này mà có người nào đó push code lên trước lúc đó vào Remote thì code của họ cũng sẽ bị mất vì đã bị thay thế là các commit của ông A. 
+    Do vậy rebase trên các nhánh public này rất nguy hiểm.
+    Thay vào đó sử dụng merge để tránh được các tình huống như này.
 
     * Tuy nhiên khi merge cũng có những bất lợi này :
     + Nếu có quá nhiều nhánh được merge vào thì history graph khi muốn kiểm tra thì trông khá là rối mắt
