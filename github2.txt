@@ -37,22 +37,29 @@ Thì sau khi checkout ra từ production mình code thêm chức năng mới
 Khi muốn đem code từ nhánh feature vô nhánh test hoặc production.
 Nên sử dụng Rebase hay Merge ?
 - Nên sử dụng merge dể gộp nhánh :
-    + Vì nếu sử dụng rebase thì nó sẽ re-committing
-tất cả các commit để ghép các commit từ feature vào làm base mới cho nhánh chính và các nhánh khác checkout từ nó
-và điều đó là không cần thiết lịch sử commit trở nên phức tạp và không nhất quán được. 
-    + Còn merge thì tạo được sự nhất quán, có trình tự, thứ tự làm việc đúng từ đầu đến cuối project. Để khi người khác đọc vào thì sẽ biết được các commit này được thực hiện lúc nào.
+    + Vì merge làm một non-destructive operation. Các commit sẽ không bị thay đổi bất kể hình thức nào.
+    + Vì nếu sử dụng rebase thì nó sẽ re-committing tất cả các commit để ghép các commit từ feature vào làm base mới cho nhánh chính 
+ điều đó là không cần thiết lịch sử commit trở nên phức tạp, khi ai đó muốn đọc lại feature commit được implement người đó implement như thế nào thì sẽ không thể vì đã bị rewrite
+, tạo nên sự không nhất quán được nếu có nhiều người cùng sử dụng chung nhánh này.
+    + Còn merge thì tạo được sự nhất quán, có trình tự, thứ tự làm việc đúng từ đầu đến cuối project.Để khi người review đọc
+    thì sẽ biết được các commit này được thực hiện lúc nào và thay đổi những cái gì.
     + Đặc biệt không nên sử dụng rebase ở đây vì rebase không nên sài cho các shared branch.
     Ví dụ :
         Nếu A sử dụng rebase ở đây thì khi push lên Remote thì Github sẽ cảnh cáo vì trên Remote các commit vẫn đang ở lúc chưa rebase,
     ở dưới local thì khi rebase nó đã rewrite lại các commit đó nên hai commit là hoàn toàn khác nhau nên git không thế thực hiện việc merge code mới vào remote.
-    Để giải quyết thì sử dụng git push -f thì commit ở trên Remote sẽ bị rewrite.
-    Và rồi có một anh B đã từng checkout trên production đó cũng muốn push code lên Remote. 
-    cũng bị hiện tượng giống vậy commit ở dưới local của họ lại khác so với commit ở trên Remote bị rebase nên git không thể merge code mới. Anh B thực hiện pull code từ Remote về để merge vào code tại local của mình rồi push lại lên Remote .
-    Và rồi có 1 anh C cũng làm việc trên production trước khi anh A làm rối tung lên. C cũng muốn push code mình đã sửa vào production lên Remote thì phải pull về thì là một đống commit merge quá merge của mấy ông thực hiên trước đó. 
-    Nếu team có nhiều người đều như vậy thì history của production sẽ rất khó để kiểm soát.
+    Để giải quyết thì sử dụng git push -f thì commit ở trên Remote sẽ bị overwrite.
+    Trong lúc đó có một anh B đã từng checkout từ production đó cũng muốn push code lên Remote. 
+    cũng bị hiện tượng giống vậy commit ở dưới local của họ lại khác so với commit ở trên Remote bị rebase nên git không thể merge code mới.
+    Anh B thực hiện pull code từ Remote về để merge vào code tại local của mình rồi push lại lên Remote .
+    Rồi có 1 anh C cũng làm việc trên production trước khi anh A làm rối tung lên. 
+    C cũng muốn push code mình đã sửa vào production lên Remote thì phải pull về và khi a C pull về thì là đống commit 
+    được merge và bị thay đổi hoàn toàn so với các commit ban đầu mà a C checkout trước đó
+    Điều này ảnh hương đến teamwork cũng như gây confuse cho các thành viên.
+    Nếu team có nhiều người đều như vậy thì sẽ rất khó để kiểm soát và hiểu được lịch sử của project.
+
     Quay lại lúc đầu nếu lúc A chuẩn bị push -f này mà có người nào đó push code lên trước lúc đó vào Remote thì code của họ cũng sẽ bị mất vì đã bị thay thế là các commit của ông A. 
-    Do vậy rebase trên các nhánh public này rất nguy hiểm.
-    Thay vào đó sử dụng merge để tránh được các tình huống như này.
+    Do vậy Re-writing vào history của các shared branch rất nguy hiểm
+    Thay vào đó sử dụng merge để tránh được các tình huống bị phát sinh từ việc Re-writing 
 
     * Tuy nhiên khi merge cũng có những bất lợi này :
     + Nếu có quá nhiều nhánh được merge vào thì history graph khi muốn kiểm tra thì trông khá là rối mắt
