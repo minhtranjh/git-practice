@@ -52,8 +52,8 @@ Nên sử dụng Rebase hay Merge ?
     cũng bị hiện tượng giống vậy commit ở dưới local của họ lại khác so với commit ở trên Remote bị rebase nên git không thể merge code mới.
     Anh B thực hiện pull code từ Remote về để merge vào code tại local của mình rồi push lại lên Remote .
     Rồi có 1 anh C cũng làm việc trên production trước khi anh A làm rối tung lên. 
-    C cũng muốn push code mình đã sửa vào production lên Remote thì phải pull về và khi a C pull về thì là đống commit 
-    được merge và bị thay đổi hoàn toàn so với các commit ban đầu mà a C checkout trước đó
+    Anh C đó cũng muốn push code mình đã sửa vào production lên Remote thì phải pull về và khi a C pull về thì là đống commit rối rắm
+    được merge và bị thay đổi hoàn toàn so với các commit ban đầu mà a C checkout trước đó và cũng có thể có cả các commit với nội dung bị lặp lại dẫn đến dư thừa.
     Điều này ảnh hương đến teamwork cũng như gây confuse cho các thành viên.
     Nếu team có nhiều người đều như vậy thì sẽ rất khó để kiểm soát và hiểu được lịch sử của project.
 
